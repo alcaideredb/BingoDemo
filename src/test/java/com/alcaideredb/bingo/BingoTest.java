@@ -1,6 +1,7 @@
 package com.alcaideredb.bingo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -17,6 +18,40 @@ public class BingoTest {
 			bingo.callNextNumber();
 
 			if (i == 74) {
+				player.shoutBingo();
+			}
+		}
+
+		assertTrue(bingo.isGameWon());
+	}
+
+	@Test
+	public void when_player_shouts_bingo_early_game_should_not_be_won() {
+		Bingo bingo = new Bingo(new BlockOf6PatternStrategy());
+		int[][] card = new BingoCardGenerator().generateBingoCard();
+		Player player = new Player(card, bingo);
+
+		for (int i = 1; i <= 75; i++) {
+			bingo.callNextNumber();
+
+			if (i == 4) {
+				player.shoutBingo();
+			}
+		}
+
+		assertFalse(bingo.isGameWon());
+	}
+
+	@Test
+	public void when_player_shouts_bingo_game_is_won_block_of_6_pattern() {
+		Bingo bingo = new Bingo(new BlockOf6PatternStrategy());
+		int[][] card = new BingoCardGenerator().generateBingoCard();
+		Player player = new Player(card, bingo);
+
+		for (int i = 1; i <= 75; i++) {
+			bingo.callNextNumber();
+
+			if (i == 53) {
 				player.shoutBingo();
 			}
 		}

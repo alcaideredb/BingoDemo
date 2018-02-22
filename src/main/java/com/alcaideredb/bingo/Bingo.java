@@ -11,14 +11,12 @@ public class Bingo {
 	private List<Player> winners;
 
 	public Bingo() {
-		bingoCaller = new BingoCaller();
-		bingoChecker = new BingoChecker();
-		winners = new ArrayList<>();
+		this(new BlackoutPatternStrategy());
 	}
 
-	public Bingo(BingoChecker bingoChecker) {
+	public Bingo(BingoPatternStrategy bingoPatternStrategy) {
 		this.bingoCaller = new BingoCaller();
-		this.bingoChecker = bingoChecker;
+		this.bingoChecker = new BingoChecker(bingoPatternStrategy);
 		this.winners = new ArrayList<>();
 	}
 
