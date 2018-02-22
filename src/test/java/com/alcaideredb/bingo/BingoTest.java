@@ -1,63 +1,48 @@
 package com.alcaideredb.bingo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
 
 import org.junit.Test;
 
 public class BingoTest {
 
 	@Test
-	public void retFiveBgCalls() {
-		int uBound = 75;
-		int lBound = 1;
+	public void when_player_shouts_bingo_game_is_won() {
 		Bingo bingo = new Bingo();
-		String assertMessage = "Bingo Number should be greater than 1 and less than or equal to 75 number was actually : ";
+		int[][] card = new BingoCardGenerator().generateBingoCard();
+		Player player = new Player(card, bingo);
 
-		for (int i = 0; i < 5; i++) {
-			int cnum = bingo.bgCallerNext();
+		for (int i = 1; i <= 75; i++) {
+			bingo.callNextNumber();
 
-			assertTrue(assertMessage + cnum, cnum > lBound);
-			assertTrue(assertMessage + cnum, cnum <= uBound);
+			if (i == 74) {
+				player.shoutBingo();
+			}
 		}
+
+		assertTrue(bingo.isGameWon());
 	}
 
 	@Test
-	public void all_numbers_expect_throw_exception() {
-		int uBound = 75;
-		int lBound = 1;
+	public void when_multiple_player_shouts_bingo_game_is_won() {
 		Bingo bingo = new Bingo();
-		String assertMessage = "Bingo Number should be greater than or equal to  1 and less than or equal to 75 number was actually : ";
-		for (int i = 0; i < 76; i++) {
-			int cnum = bingo.bgCallerNext();
+		int[][] card = new BingoCardGenerator().generateBingoCard();
+		int[][] card2 = new BingoCardGenerator().generateBingoCard();
+		Player player1 = new Player(card, bingo);
+		Player player2 = new Player(card2, bingo);
 
+		for (int i = 1; i <= 75; i++) {
+			bingo.callNextNumber();
+
+			if (i == 74) {
+				player1.shoutBingo();
+				player2.shoutBingo();
+			}
 		}
+		final int NUM_OF_WINNERS = 2;
+		assertEquals(NUM_OF_WINNERS, bingo.getWinners().size());
+		assertTrue(bingo.isGameWon());
 	}
 
-	@Test
-	public void generateBingoCardTest() {
-		fail("NOT IMPLEMENTED");
-		// int[][] expected = { { 9, 10, 1, 11, 4 }, { 24, 25, 16, 26, 19 }, {
-		// 39, 40, -1, 41, 34 },
-		// { 54, 55, 46, 56, 49 }, { 69, 70, 61, 71, 64 } };
-		//
-		// assertArrayEquals(Bingo.generateBingoCard(), expected);
-
-	}
-
-	@Test
-	public void chkWin() {
-		Bingo bingo = new Bingo();
-		int[][] card = Bingo.generateBingoCard();
-		for (int i = 0; i < 74; i++) {
-			bingo.bgCallerNext();
-		}
-		System.out.println(bingo.getCalledNumbers());
-
-		System.out.println(Arrays.deepToString(card));
-		assertTrue(bingo.bingoShout(card));
-
-	}
 }
